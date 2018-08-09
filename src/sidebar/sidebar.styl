@@ -1,0 +1,37 @@
+.sidebar
+  width 240px
+  height 100%
+  &.fold
+    width 80px
+    .ant-menu-item,
+    .ant-menu-submenu
+      display inherit
+      align-items center
+      a
+        flex none
+  .ant-menu
+    flex auto
+  .ant-menu-item, .ant-menu-submenu
+    .ide-icon
+      margin-right 8px
+  .ant-menu-item
+    display flex
+    align-items center
+    a
+      flex 1
+    &:first-child
+      margin-top 0
+  .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .ide-icon + span
+    max-width 0
+    display inline-block
+    opacity 0
+
+.sidebar-bottom
+  height 50px
+  line-height 50px
+  border-top 1px solid #e9e9e9
+  border-right 1px solid #e9e9e9
+  text-align center
+  label
+    padding 16px 33px
+    cursor pointer

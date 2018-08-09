@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{pageConfig.title}}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        {% set absoluteUrlReg = r/^\/\// %}
+        {% set libPath = config('client.url.host') + config('client.url.libPath') %}
+        {% set staticPath = config('client.url.host') + config('client.url.staticPath') %}
+        <link rel="shortcut icon" href="//cdn.dtwave.com/public/ico/dtwave.ico" type="image/x-icon">
+
+        {% if isCommonPage %}
+            <link rel="stylesheet" href="//cdn.dtwave.com/public/antd/2.13.2/antd.min.css">
+            <link rel="stylesheet" href="{{commonPagePre}}main.css">
+        {% else %}
+            {% for cssPath in pageConfig.css %}
+                {% if absoluteUrlReg.test(cssPath) %}
+                    <link rel="stylesheet" href="{{cssPath}}">
+                {% else %}
+                    <link rel="stylesheet" href="{{staticPath}}{{cssPath}}">
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <script type="text/javascript">
+            {{ userConfig | safe }}
+            {{ onerConfig | safe }}
+            {{ windowKeeper | safe }}
+        </script>
+
+    </head>
+    <body>
+        <div id="root"></div>
+        <script src="{{config('server.cdnHost')}}public/babel-polyfill/6.23.0/polyfill.min.js"></script>
+        {% if config('client.isProduction') %}
+            {# 生产环境的url是cdn上人肉维护的，做了必要的简化 #}
+            <script src="{{libPath}}react/16.2.0/react.min.js"></script>
+            <script src="{{libPath}}react-dom/16.2.0/react-dom.min.js"></script>
+            <script src="{{libPath}}mobx/3.1.9/mobx.umd.min.js"></script>
+            <script src="{{libPath}}mobx-react/4.1.8/mobx-react.min.js"></script>
+            <script src="{{libPath}}moment/2.18.1/moment.min.js"></script>
+            <script src="{{libPath}}antd/3.2.2/antd.min.js"></script>
+            <script src="{{libPath}}lodash/4.17.4/lodash.min.js"></script>
+        {% else %}
+            {# 开发环境的url是npm安装下来的包的内部文件目录决定的 #}
+            <script src="{{libPath}}react/umd/react.production.min.js"></script>
+            <script src="{{libPath}}react-dom/umd/react-dom.production.min.js"></script>
+            <script src="{{libPath}}mobx/lib/mobx.umd.min.js"></script>
+            <script src="{{libPath}}mobx-react/index.min.js"></script>
+            <script src="{{libPath}}moment/min/moment.min.js"></script>
+            <script src="{{libPath}}antd/dist/antd.min.js"></script>
+            <script src="{{libPath}}lodash/lodash.min.js"></script>
+        {% endif %}
+
+        {% if isCommonPage %}
+            <script src="{{commonPagePre}}common.js"></script>
+            <script src="{{commonPagePre}}main.js"></script>
+        {% else %}
+            {% for jsPath in pageConfig.js %}
+                {% if absoluteUrlReg.test(jsPath) %}
+                    <script src="{{jsPath}}{{timeStamp}}"></script>
+                {% else %}
+                    <script src="{{staticPath}}{{jsPath}}"></script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </body>
+</html>
